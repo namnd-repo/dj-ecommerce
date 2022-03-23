@@ -17,5 +17,6 @@ urlpatterns = [
     path('update-cart', cart.updatecart, name='updatecart'),
     path('delete-cart-item', cart.deletecartitem, name='deletecartitem'),
 
-    path('checkout', checkout.index, name="checkout"),
+    path('checkout', checkout.index, name='checkout'),
+    path('place-order', checkout.placeorder, name='placeorder'),
 ]
