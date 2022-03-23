@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from store.models import *
+import random
 
 @login_required(login_url='loginpage')
 def index(request):
@@ -37,6 +38,12 @@ def placeorder(request):
             cart_total_price = cart_total_price + item.product.selling_price * item.product_qty
         
         neworder.total_price = cart_total_price
+        trackno = 'track' + str(random.randint(111111111, 999999999))
+        while Order.objects.filter(tracking_no = trackno) is None:
+            trackno = 'track' + str(random.randint(111111111, 999999999))
+        
+        neworder.tracking_no = trackno
+
         neworder.save()
 
         neworderitems = Cart.objects.filter(user=request.user)

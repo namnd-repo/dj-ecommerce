@@ -70,11 +70,12 @@ class Order(models.Model):
         ('Completed', 'Completed'),
     )
     status = models.CharField(max_length=150, choices=orderstatuses, default="Pending")
+    tracking_no = models.CharField(max_length=150, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}'.format(self.id)
+        return '{} {}'.format(self.id, self.tracking_no)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -83,4 +84,4 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(null=False)
 
     def __str__(self):
-        return '{}'.format(self.order.id)
+        return '{} {}'.format(self.order.id, self.order.tracking_no)
