@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="py-3 bg-primary">
+<div class="py-3 bg-dark">
     <div class="container">
         <a class="text-white" href="{% url 'home' %}"> Home /</a>
         <a class="text-white" href="{% url 'categories' %}"> Categories</a>
@@ -23,7 +23,7 @@
                                     <div class="category-image">
                                         <img src="{{ item.image.url }}" alt="Category image" class="w-100">
                                     </div>
-                                    <h4 class="text-center">{{ item.name }}</h4>
+                                    <h4 class="text-center text-dark my-2">{{ item.name }}</h4>
                                 </div>
                             </a>
                         </div>

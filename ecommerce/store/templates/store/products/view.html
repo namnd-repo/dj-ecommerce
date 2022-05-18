@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="py-3 bg-primary">
+<div class="py-3 bg-dark">
     <div class="container">
         <a class="text-white" href="{% url 'home' %}"> Home /</a>
         <a class="text-white" href="{% url 'categories' %}"> Categories /</a>
@@ -32,9 +32,9 @@
                                     {% endif %}
                                 </h2>
                                 <hr>
-                                <label class="fw-bold">Selling Price : VND {{products.selling_price | stringformat:'d'}}</label>
+                                <label class="fw-bold">Selling Price : USD {{products.selling_price | stringformat:'.2f'}}</label>
                                 <p class="mt-3">
-                                    {{ products.small_description}}
+                                    {{ products.small_description | linebreaks }}
                                 </p>
                                 <hr>
                                 {% if products.quantity > 0 %}

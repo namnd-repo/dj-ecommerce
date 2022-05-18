@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from store.models import *
 import random
 
@@ -60,6 +61,12 @@ def placeorder(request):
             orderproduct.quantity = orderproduct.quantity - item.product_qty
             orderproduct.save()
 
+        Cart.objects.filter(user=request.user).delete()
+
+        payMode = request.POST.get('payment_mode')
+        if (payMode == "Paid by Paypal"):
+            return JsonResponse({'status':"Order successfully"})
+        else:
             messages.success(request, 'Ordered successfully')
 
     return redirect('/')

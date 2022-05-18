@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="py-3 bg-primary">
+<div class="py-3 bg-dark">
     <div class="container">
         <a class="text-white" href="{% url 'home' %}"> Home /</a>
         <a class="text-white" href="{% url 'categories' %}"> Categories /</a>
@@ -24,8 +24,9 @@
                                     <div class="category-image">
                                         <img src="{{ item.product_image.url }}" alt="Product image" class="w-100">
                                     </div>
-                                    <h4 class="text-center">{{ item.name }}</h4>
-                                    <span class="float-start">{{ item.selling_price | stringformat:'d' }}</span>
+                                    <h5 class="text-center text-dark my-2">{{ item.name }}</h5>
+                                    {% comment %} <span class="float-start">{{ item.selling_price | stringformat:'d' }}</span> {% endcomment %}
+                                    <div class="d-flex justify-content-center text-dark">{{ item.selling_price | stringformat:'.2f' }} USD</div>
                                 </div>
                             </a>
                         </div>

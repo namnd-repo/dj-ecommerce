@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="py-3 bg-primary">
+<div class="py-3 bg-dark">
     <div class="container">
         <a class="text-white" href="{% url 'home' %}"> Home /</a>
         <a class="text-white" href="{% url 'checkout' %}"> Checkout </a>
@@ -65,17 +65,17 @@
                                                  {{ item.product.name }} 
                                             </td>
                                             <td> {{ item.product_qty }} </td>
-                                            <td> {{ item.product.selling_price | stringformat:'d'}} </td>
+                                            <td> {{ item.product.selling_price | stringformat:'.2f'}} </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                             <h6 class="fw-bold"> Total 
-                                <span class="float-end"> VND {{ total_price | stringformat:'d' }} </span>
+                                <span class="float-end"> USD {{ total_price | stringformat:'.2f' }} </span>
                             </h6>
                             <input type="hidden" value="COD" name="payment_mode">
                             <div class="mt-3">
-                                <button type="submit" class="btn btn-success w-100">Purchase</button>
+                                <button type="submit" class="btn btn-success w-100">COD</button>
                                 <div id="paypal-button-container" class="mt-3"></div>
                             </div>
                         {% else %}
@@ -98,6 +98,23 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AZbZYwROx-Z8YkRL329SNmhc1CBgcz280b6RsZqUNsWTRx4asnPuo3SZZSee5mWVrwKhNUew9TIhMK1k&currency=USD"></script> 
     <script>
         paypal.Buttons({
+          onClick: (data, actions) => {
+            // My validation
+            var fname = $("[name='fname']").val();
+            var lname = $("[name='lname']").val();
+            var email = $("[name='email']").val();
+            var phone = $("[name='phone']").val();
+            var address = $("[name='address']").val();
+            var token = $("[name='csrfmiddlewaretoken']").val();
+
+            if (fname == "" || lname == "" || email == "" || phone == "" || address == "") {
+                swal("Alert!", "All fields are mandatory!", "error");
+                return false;
+            }
+            else {
+                return true;
+            }
+          },
           // Sets up the transaction when a payment button is clicked
           createOrder: (data, actions) => {
             return actions.order.create({
@@ -112,9 +129,39 @@
           onApprove: (data, actions) => {
             return actions.order.capture().then(function(orderData) {
               // Successful capture! For dev/demo purposes:
-              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-              const transaction = orderData.purchase_units[0].payments.captures[0];
-              alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+              //console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              //aler(orderData.id);
+              //const transaction = orderData.purchase_units[0].payments.captures[0];
+              //alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+
+                var fname = $("[name='fname']").val();
+                var lname = $("[name='lname']").val();
+                var email = $("[name='email']").val();
+                var phone = $("[name='phone']").val();
+                var address = $("[name='address']").val();
+                var token = $("[name='csrfmiddlewaretoken']").val();
+
+                data = {
+                    "fname": fname,
+                    "lname": lname,
+                    "email": email,
+                    "phone": phone,
+                    "address": address,
+                    "payment_mode": "Paid by PayPal",
+                    "payment_id": orderData.id,
+                    csrfmiddlewaretoken: token
+                }
+                $.ajax({
+                    method: "POST",
+                    url: "/place-order",
+                    data: data,
+                    success: function (responsec) {
+                        swal("Congratulations!", responsec.status, "success").then((value) => {
+                            window.location.href = '/my-orders'
+                        });
+                    }
+                });
+
               // When ready to go live, remove the alert and show a success message within this page. For example:
               // const element = document.getElementById('paypal-button-container');
               // element.innerHTML = '<h3>Thank you for your payment!</h3>';
