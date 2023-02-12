@@ -8,7 +8,7 @@
 git clone https://github.com/namnd-repo/dj-ecommerce.git
 </pre>
 
-* Create virtual environment if you want to. Install requirements (upgrade pip might solve some installation errors).
+* Create virtual environment if you want to. Install requirements.
 <pre>
 pip install -r requirements.txt
 </pre>
